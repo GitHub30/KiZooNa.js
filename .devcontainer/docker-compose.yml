@@ -37,8 +37,8 @@ services:
     ports:
       - 8080:80
     environment:
-      - MYSQL_USER=mariadb
-      - MYSQL_PASSWORD=mariadb
+      - PMA_USER=mariadb
+      - PMA_PASSWORD=mariadb
 
 volumes:
   mariadb-data:
