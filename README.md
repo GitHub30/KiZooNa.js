@@ -8,7 +8,7 @@ HTTP MySQL/SQLite Proxy
   <script src="https://github30.github.io/KiZooNa.js/KiZooNa.js"></script>
   <script type=module>
     const db = new DB({
-      url: '/sql-injection.php',
+      url: 'http://localhost/sql-injection.php',
       dsn: 'mysql:host=127.0.0.1;dbname=mariadb',
       username: 'mariadb',
       password: 'mariadb'
