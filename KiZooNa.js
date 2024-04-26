@@ -162,7 +162,7 @@ class DB {
     async createTable(name, define_columns) {
         const table = new Table(name)
         define_columns(table)
-        if (this.config.debug) console.log({ table })
+        if (this.config.debug) console.debug({ table })
         await this.query(table.toString())
         return this
     }
