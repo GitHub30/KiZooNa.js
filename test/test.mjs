@@ -7,11 +7,11 @@ describe('DATABASE', () => {
   before(() => {
     db = new DB({
       url: 'http://localhost/sql-injection.php',
-      dsn: 'mysql:host=127.0.0.1;dbname=mariadb',
+      dsn: 'mysql:host=127.0.0.1dbname=mariadb',
       username: 'mariadb',
       password: 'mariadb'
     })
-  });
+  })
 
   it('Create table', async () => {
     await db.createTable('users', table => {
@@ -22,17 +22,17 @@ describe('DATABASE', () => {
       table.timestamp('updated_at').useCurrent().useCurrentOnUpdate()
       table.softDeletes()
     })
-  });
+  })
   it('Insert', async () => {
     await db.table('users').insert({ name: 'Jake', age: 29 })
-  });
+  })
   it('Update', async () => {
     await db.table('users').where('name', 'Jake').update({ age: 31 })
-  });
+  })
   it('Delete', async () => {
     await db.table('users').where('name', 'Jake').delete()
-  });
+  })
   it('Drop table', async () => {
     await db.dropTable('users')
-  });
-});
+  })
+})
