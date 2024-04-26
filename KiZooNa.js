@@ -246,3 +246,6 @@ class Table {
         return `CREATE TABLE IF NOT EXISTS ${this.name} (\n${columns.join(',\n')}\n)`
     }
 }
+
+if (typeof global === 'object') global.DB = DB
+if (typeof global === 'object') global.Table = Table
