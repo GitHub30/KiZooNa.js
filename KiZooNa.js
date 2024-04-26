@@ -97,58 +97,59 @@ class DB {
             sql += ` OFFSET ${this._offset}`
         }
 
-        this.select_list = null
-        this.table_name = null
-        this.where_list = null
-        this.group_by_list = null
-        this.order_by_list = null
-        this._limit = null
-        this._offset = null
-
         return this.query(sql)
     }
 
-    async first() {
-        this.limit(1)
-        return this.get().then(rows => rows[0])
+    first() {
+        this.fetch = true
+        return this.get()
     }
 
-    async value(column) {
-        return this.first().then(row => row[column])
+    value(column) {
+        this.fetchColumn = true
+        if (column && this.select_list) {
+            this.fetchColumn_column = this.select_list.indexOf(column)
+        }
+        return this.get()
     }
 
-    async insert(rows) {
+    async pluck(value_column, key_column) {
+        if (key_column) {
+            this.select_list = [key_column, value_column]
+            this.fetchAll_mode = 'PDO::FETCH_KEY_PAIR'
+        } else {
+            this.select_list = [value_column]
+            this.fetchAll_mode = 'PDO::FETCH_COLUMN'
+        }
+        return this.get()
+    }
+
+    insert(rows) {
+        this.rowCount = true
         if (!Array.isArray(rows)) rows = [rows]
         const placeholder = rows.map(row => `(${Object.values(row).map(value => value instanceof RawString ? value : '?').join(', ')})`).join(', ')
         const values = rows.flatMap(row => Object.values(row).filter(value => !(value instanceof RawString)))
-        this.query(`INSERT INTO ${this.table_name} (${Object.keys(rows[0]).join(', ')}) VALUES ${placeholder}`, values)
-        this.table_name = null
-        return this
+        return this.query(`INSERT INTO ${this.table_name} (${Object.keys(rows[0]).join(', ')}) VALUES ${placeholder}`, values)
     }
 
-    async insertGetId(rows) {
+    insertGetId(rows) {
+        this.lastInsertId = true
         if (!Array.isArray(rows)) rows = [rows]
         const placeholder = rows.map(row => `(${Object.values(row).map(value => value instanceof RawString ? value : '?').join(', ')})`).join(', ')
         const values = rows.flatMap(row => Object.values(row).filter(value => !(value instanceof RawString)))
-        this.query(`INSERT INTO ${this.table_name} (${Object.keys(rows[0]).join(', ')}) VALUES ${placeholder}`, values)
-        this.table_name = null
-        return this
+        return this.query(`INSERT INTO ${this.table_name} (${Object.keys(rows[0]).join(', ')}) VALUES ${placeholder}`, values)
     }
 
-    async update($data) {
+    update($data) {
+        this.rowCount = true
         const where_string = this.where_list ? ` WHERE ` + this.where_list.map(({ column, operator, value }) => `${column} ${operator} ${JSON.stringify(value).replaceAll("\"", "'")}`).join(' AND ') : ''
-        await this.query(`UPDATE ${this.table_name} SET ${Object.keys($data).map(column => column + ' = ?').join(', ')}${where_string}`, Object.values($data))
-        this.table_name = null
-        this.where_list = null
-        return this
+        return this.query(`UPDATE ${this.table_name} SET ${Object.keys($data).map(column => column + ' = ?').join(', ')}${where_string}`, Object.values($data))
     }
 
-    async delete() {
+    delete() {
+        this.rowCount = true
         const where_string = this.where_list ? ` WHERE ` + this.where_list.map(({ column, operator, value }) => `${column} ${operator} ${JSON.stringify(value).replaceAll("\"", "'")}`).join(' AND ') : ''
-        await this.query(`DELETE FROM ${this.table_name}${where_string}`)
-        this.table_name = null
-        this.where_list = null
-        return this
+        return this.query(`DELETE FROM ${this.table_name}${where_string}`)
     }
 
     async query(query, params) {
@@ -161,12 +162,47 @@ class DB {
         if (params) {
             url.searchParams.set('params', JSON.stringify(params))
         }
+        if (this.lastInsertId) {
+            url.searchParams.set('lastInsertId', this.lastInsertId)
+        }
+        if (this.rowCount) {
+            url.searchParams.set('rowCount', this.rowCount)
+        }
+        if (this.fetch) {
+            url.searchParams.set('fetch', this.fetch)
+        }
+        if (this.fetchColumn) {
+            url.searchParams.set('fetchColumn', this.fetchColumn)
+        }
+        if (this.fetchColumn_column) {
+            url.searchParams.set('fetchColumn_column', this.fetchColumn_column)
+        }
+        if (this.fetchAll_mode) {
+            url.searchParams.set('fetchAll_mode', this.fetchAll_mode)
+        }
+        this.reset()
         const response = await fetch(url)
         const result = await response.json()
         if (!response.ok) {
             console.log(result)
         }
         return result
+    }
+
+    reset() {
+        this.select_list = null
+        this.table_name = null
+        this.where_list = null
+        this.group_by_list = null
+        this.order_by_list = null
+        this._limit = null
+        this._offset = null
+        this.lastInsertId = null
+        this.rowCount = null
+        this.fetch = null
+        this.fetchColumn = null
+        this.fetchColumn_column = null
+        this.fetchAll_mode = null
     }
 
     /**
