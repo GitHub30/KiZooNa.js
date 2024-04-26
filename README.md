@@ -32,3 +32,9 @@ HTTP MySQL/SQLite Proxy
 
 </html>
 ```
+
+# TEST
+
+```bash
+node --run test
+```
