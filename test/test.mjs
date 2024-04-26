@@ -7,7 +7,7 @@ describe('DATABASE', () => {
   before(() => {
     db = new DB({
       url: 'http://localhost/sql-injection.php',
-      dsn: 'mysql:host=127.0.0.1dbname=mariadb',
+      dsn: 'mysql:host=127.0.0.1;dbname=mariadb',
       username: 'mariadb',
       password: 'mariadb'
     })
@@ -23,22 +23,27 @@ describe('DATABASE', () => {
       table.softDeletes()
     })
   })
+
   it('Insert', async () => {
     await db.table('users').insert({ name: 'Jake', age: 29 })
   })
-  it('MultipleInsert', async () => {
+
+  it('Multiple insert', async () => {
     await db.table('users').insert([
       { name: 'Alice', age: 29 },
       { name: 'Bond', age: db.raw('ROUND( RAND() * 50 + 100 )') },
       { name: 'Cargo', age: 31 }
     ])
   })
+
   it('Update', async () => {
     await db.table('users').where('name', 'Jake').update({ age: 31 })
   })
+
   it('Delete', async () => {
     await db.table('users').where('name', 'Jake').delete()
   })
+
   it('Drop table', async () => {
     await db.dropTable('users')
   })
