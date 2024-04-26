@@ -1,6 +1,12 @@
+class RawString extends String { }
+
 class DB {
     constructor(config) {
         this.config = config;
+    }
+
+    raw(string) {
+        return new RawString(string)
     }
 
     select(select) {
@@ -71,7 +77,7 @@ class DB {
         if (this._distinct) {
             sql += ' DISTINCT'
         }
-        sql +=  ` ${this.select_list ? this.select_list.join(', ') : '*'}`
+        sql += ` ${this.select_list ? this.select_list.join(', ') : '*'}`
         if (this.table_name) {
             sql += ` FROM  ${this.table_name}`
         }
@@ -224,7 +230,7 @@ class Table {
     }
     toString() {
         const columns = []
-        for(const column of this.columns) {
+        for (const column of this.columns) {
             let column_string = `  ${column.name} ${column.type}`
             if (column.nullable === false) {
                 column_string += ' NOT NULL'
@@ -240,7 +246,7 @@ class Table {
             }
             columns.push(column_string)
         }
-        for(const column of this.columns.filter(({autoIncrement}) => autoIncrement)) {
+        for (const column of this.columns.filter(({ autoIncrement }) => autoIncrement)) {
             columns.push(`  PRIMARY KEY (${column.name})`)
         }
         return `CREATE TABLE IF NOT EXISTS ${this.name} (\n${columns.join(',\n')}\n)`
