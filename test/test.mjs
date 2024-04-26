@@ -2,9 +2,9 @@ import '../KiZooNa.js'
 import assert from 'assert'
 
 
-describe('DATABASE', function () {
+describe('DATABASE', () => {
   let db
-  before(function () {
+  before(() => {
     db = new DB({
       url: 'http://localhost/sql-injection.php',
       dsn: 'mysql:host=127.0.0.1;dbname=mariadb',
@@ -13,7 +13,7 @@ describe('DATABASE', function () {
     })
   });
 
-  it('Create table', async function () {
+  it('Create table', async () => {
     await db.createTable('users', table => {
       table.increments('id')
       table.string('name', 255).nullable().default(null)
@@ -23,16 +23,16 @@ describe('DATABASE', function () {
       table.softDeletes()
     })
   });
-  it('Insert', async function () {
+  it('Insert', async () => {
     await db.table('users').insert({ name: 'Jake', age: 29 })
   });
-  it('Update', async function () {
+  it('Update', async () => {
     await db.table('users').where('name', 'Jake').update({ age: 31 })
   });
-  it('Delete', async function () {
+  it('Delete', async () => {
     await db.table('users').where('name', 'Jake').delete()
   });
-  it('Drop table', async function () {
+  it('Drop table', async () => {
     await db.dropTable('users')
   });
 });
