@@ -170,7 +170,6 @@ class DB {
     }
 
     /**
-     * 
      * @param {string} name 
      * @param {function(Table): void} define_columns 
      * @returns {Promise<Table>}
