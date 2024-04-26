@@ -15,6 +15,7 @@
 	},
 	// For use with PHP or Apache (e.g.php -S localhost:8080 or apache2ctl start)
 	"forwardPorts": [
+		80,
 		8080,
 		3306
 	],
