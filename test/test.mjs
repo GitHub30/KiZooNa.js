@@ -1,7 +1,6 @@
-import { readFileSync } from 'node:fs';
-import assert from 'assert';
+import '../KiZooNa.js'
+import assert from 'assert'
 
-eval(readFileSync('KiZooNa.js') + ';global.DB=DB;global.Table=Table')
 
 describe('DATABASE', function () {
   let db
@@ -10,8 +9,7 @@ describe('DATABASE', function () {
       url: 'http://localhost/sql-injection.php',
       dsn: 'mysql:host=127.0.0.1;dbname=mariadb',
       username: 'mariadb',
-      password: 'mariadb',
-      debug: true
+      password: 'mariadb'
     })
   });
 
