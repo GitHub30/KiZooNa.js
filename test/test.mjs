@@ -26,6 +26,13 @@ describe('DATABASE', () => {
   it('Insert', async () => {
     await db.table('users').insert({ name: 'Jake', age: 29 })
   })
+  it('MultipleInsert', async () => {
+    await db.table('users').insert([
+      { name: 'Alice', age: 29 },
+      { name: 'Bond', age: db.raw('ROUND( RAND() * 50 + 100 )') },
+      { name: 'Cargo', age: 31 }
+    ])
+  })
   it('Update', async () => {
     await db.table('users').where('name', 'Jake').update({ age: 31 })
   })
