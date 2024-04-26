@@ -3,6 +3,9 @@ import assert from 'assert'
 
 
 describe('DATABASE', () => {
+  /**
+   * @type {DB}
+   */
   let db
   before(() => {
     db = new DB({

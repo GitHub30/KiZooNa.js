@@ -169,6 +169,12 @@ class DB {
         return result
     }
 
+    /**
+     * 
+     * @param {string} name 
+     * @param {function(Table): void} define_columns 
+     * @returns {Promise<Table>}
+     */
     async createTable(name, define_columns) {
         const table = new Table(name)
         define_columns(table)
