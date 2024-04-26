@@ -117,16 +117,20 @@ class DB {
         return this.first().then(row => row[column])
     }
 
-    async insert($data) {
-        const values = Object.values($data)
-        this.query(`INSERT INTO ${this.table_name} (${Object.keys($data).join(', ')}) VALUES (${new Array(values.length).fill('?').join(', ')})`, values)
+    async insert(rows) {
+        if (!Array.isArray(rows)) rows = [rows]
+        const placeholder = rows.map(row => `(${Object.values(row).map(value => value instanceof RawString ? value : '?').join(', ')})`).join(', ')
+        const values = rows.flatMap(row => Object.values(row).filter(value => !(value instanceof RawString)))
+        this.query(`INSERT INTO ${this.table_name} (${Object.keys(rows[0]).join(', ')}) VALUES ${placeholder}`, values)
         this.table_name = null
         return this
     }
 
-    async insertGetId($data) {
-        const values = Object.values($data)
-        await this.query(`INSERT INTO ${this.table_name} (${Object.keys($data).join(', ')}) VALUES (${new Array(values.length).fill('?').join(', ')})`, values)
+    async insertGetId(rows) {
+        if (!Array.isArray(rows)) rows = [rows]
+        const placeholder = rows.map(row => `(${Object.values(row).map(value => value instanceof RawString ? value : '?').join(', ')})`).join(', ')
+        const values = rows.flatMap(row => Object.values(row).filter(value => !(value instanceof RawString)))
+        this.query(`INSERT INTO ${this.table_name} (${Object.keys(rows[0]).join(', ')}) VALUES ${placeholder}`, values)
         this.table_name = null
         return this
     }
