@@ -53,13 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST
                 }
             } else if (isset($_REQUEST['fetch'])) {
                 if (isset($_REQUEST['fetch_mode'])) {
-                    json_response($stmt->fetch(constant($_REQUEST['fetch_mode'])));
+                    $mode = array_sum(array_map(fn ($name) => constant($name), explode('|', $_REQUEST['fetch_mode'])));
+                    json_response($stmt->fetch($mode));
                 } else {
                     json_response($stmt->fetch(PDO::FETCH_ASSOC));
                 }
             } else {
                 if (isset($_REQUEST['fetchAll_mode'])) {
-                    json_response($stmt->fetchAll(constant($_REQUEST['fetchAll_mode'])));
+                    $mode = array_sum(array_map(fn ($name) => constant($name), explode('|', $_REQUEST['fetchAll_mode'])));
+                    json_response($stmt->fetchAll($mode));
                 } else {
                     json_response($stmt->fetchAll(PDO::FETCH_ASSOC));
                 }
