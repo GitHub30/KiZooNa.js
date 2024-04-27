@@ -69,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST
         }
     } catch (PDOException $e) {
         http_response_code(400);
-        header('Content-type: application/json');
-        echo json_encode($e->getMessage());
+        json_response($e->getMessage());
     }
 }
