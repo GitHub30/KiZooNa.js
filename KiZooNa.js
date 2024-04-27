@@ -190,19 +190,19 @@ class DB {
     }
 
     reset() {
-        this.select_list = null
-        this.table_name = null
-        this.where_list = null
-        this.group_by_list = null
-        this.order_by_list = null
-        this._limit = null
-        this._offset = null
-        this.lastInsertId = null
-        this.rowCount = null
-        this.fetch = null
-        this.fetchColumn = null
-        this.fetchColumn_column = null
-        this.fetchAll_mode = null
+        delete this.select_list
+        delete this.table_name
+        delete this.where_list
+        delete this.group_by_list
+        delete this.order_by_list
+        delete this._limit
+        delete this._offset
+        delete this.lastInsertId
+        delete this.rowCount
+        delete this.fetch
+        delete this.fetchColumn
+        delete this.fetchColumn_column
+        delete this.fetchAll_mode
     }
 
     /**
