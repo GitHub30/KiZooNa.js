@@ -113,7 +113,7 @@ class DB {
         return this.get()
     }
 
-    async pluck(value_column, key_column) {
+    pluck(value_column, key_column) {
         if (key_column) {
             this.select_list = [key_column, value_column]
             this.fetchAll_mode = 'PDO::FETCH_KEY_PAIR'
@@ -122,6 +122,31 @@ class DB {
             this.fetchAll_mode = 'PDO::FETCH_COLUMN'
         }
         return this.get()
+    }
+
+    count() {
+        this.select_list = ['COUNT(*)']
+        return this.value()
+    }
+
+    max(column) {
+        this.select_list = [`MAX(${column})`]
+        return this.value()
+    }
+
+    min(column) {
+        this.select_list = [`MIN(${column})`]
+        return this.value()
+    }
+
+    avg(column) {
+        this.select_list = [`AVG(${column})`]
+        return this.value().then(Number)
+    }
+
+    sum(column) {
+        this.select_list = [`SUM(${column})`]
+        return this.value().then(Number)
     }
 
     insert(rows) {
@@ -184,7 +209,8 @@ class DB {
         const response = await fetch(this.config.url + '?' + searchParams)
         const result = await response.json()
         if (!response.ok) {
-            console.log(result)
+            console.error(query, params)
+            console.error(result)
         }
         return result
     }
