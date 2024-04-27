@@ -1,3 +1,6 @@
+> [!WARNING]
+> Do not use in production environment
+
 # KiZooNa.js
 HTTP MySQL/SQLite Proxy
 
