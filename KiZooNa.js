@@ -79,7 +79,7 @@ class DB {
         }
         sql += ` ${this.select_list ? this.select_list.join(', ') : '*'}`
         if (this.table_name) {
-            sql += ` FROM  ${this.table_name}`
+            sql += ` FROM ${this.table_name}`
         }
         if (this.where_list) {
             sql += ` WHERE ` + this.where_list.map(({ column, operator, value }) => `${column} ${operator} ${JSON.stringify(value).replaceAll("\"", "'")}`).join(' AND ')
@@ -111,6 +111,11 @@ class DB {
             this.fetchColumn_column = this.select_list.indexOf(column)
         }
         return this.get()
+    }
+
+    find(id) {
+        this.where('id', id)
+        return this.find()
     }
 
     pluck(value_column, key_column) {
