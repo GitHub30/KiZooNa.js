@@ -64,11 +64,11 @@ node --run test
       table.timestamp('created_at').useCurrent()
     })
     
-    await db.table('users').insert({ name: 'Jake', age: 29 })
+    var lastInsertId = await db.table('users').insertGetId({ name: 'Jake', age: 29 })
     console.table(await db.table('users').get())
 
     // Multiple insert
-    await db.table('users').insert([
+    var affectedRows = await db.table('users').insert([
       { name: 'Alice', age: 29 },
       { name: 'Bond', age: db.raw('ROUND( RAND() * 50 + 100 )') },
       { name: 'Cargo', age: 31 }
@@ -97,9 +97,9 @@ node --run test
     console.log(await db.table('users').oldest().get())
     console.log(await db.table('users').latest().get())
 
-    await db.table('users').where('name', 'Jake').update({ age: 31 })
+    var affectedRows = await db.table('users').where('name', 'Jake').update({ age: 31 })
 
-    await db.table('users').where('name', 'Jake').delete()
+    var affectedRows = await db.table('users').where('name', 'Jake').delete()
     await db.dropTable('users')
   </script>
 </body>
