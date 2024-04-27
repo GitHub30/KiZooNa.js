@@ -154,34 +154,34 @@ class DB {
 
     async query(query, params) {
         if (this.config.debug) console.log('query:', query, 'params:', params)
-        const url = new URL(this.config.url)
-        url.searchParams.set('dsn', this.config.dsn)
-        url.searchParams.set('username', this.config.username)
-        url.searchParams.set('password', this.config.password)
-        url.searchParams.set('query', query)
+        const searchParams = new URLSearchParams()
+        searchParams.set('dsn', this.config.dsn)
+        searchParams.set('username', this.config.username)
+        searchParams.set('password', this.config.password)
+        searchParams.set('query', query)
         if (params) {
-            url.searchParams.set('params', JSON.stringify(params))
+            searchParams.set('params', JSON.stringify(params))
         }
         if (this.lastInsertId) {
-            url.searchParams.set('lastInsertId', this.lastInsertId)
+            searchParams.set('lastInsertId', this.lastInsertId)
         }
         if (this.rowCount) {
-            url.searchParams.set('rowCount', this.rowCount)
+            searchParams.set('rowCount', this.rowCount)
         }
         if (this.fetch) {
-            url.searchParams.set('fetch', this.fetch)
+            searchParams.set('fetch', this.fetch)
         }
         if (this.fetchColumn) {
-            url.searchParams.set('fetchColumn', this.fetchColumn)
+            searchParams.set('fetchColumn', this.fetchColumn)
         }
         if (this.fetchColumn_column) {
-            url.searchParams.set('fetchColumn_column', this.fetchColumn_column)
+            searchParams.set('fetchColumn_column', this.fetchColumn_column)
         }
         if (this.fetchAll_mode) {
-            url.searchParams.set('fetchAll_mode', this.fetchAll_mode)
+            searchParams.set('fetchAll_mode', this.fetchAll_mode)
         }
         this.reset()
-        const response = await fetch(url)
+        const response = await fetch(this.config.url + '?' + searchParams)
         const result = await response.json()
         if (!response.ok) {
             console.log(result)
