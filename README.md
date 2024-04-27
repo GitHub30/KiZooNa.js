@@ -56,6 +56,8 @@ node --run test
       username: 'mariadb',
       password: 'mariadb'
     })
+    console.log(await db.query('SHOW DATABASES'))
+    console.log(await db.query('SHOW TABLES'))
     
     await db.createTable('users', table => {
       table.increments('id')
