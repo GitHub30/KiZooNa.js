@@ -115,7 +115,7 @@ class DB {
 
     find(id) {
         this.where('id', id)
-        return this.find()
+        return this.first()
     }
 
     pluck(value_column, key_column) {
