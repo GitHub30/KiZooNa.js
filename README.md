@@ -85,6 +85,7 @@ node --run test
     console.log(await db.table('users').avg('age'))
     console.log(await db.table('users').sum('age'))
 
+    console.table(await db.table('users').select('name').get())
     console.table(await db.table('users').limit(3).get())
     console.table(await db.table('users').where('name', 'Cargo').orderBy('age').get())
     console.table(await db.table('users').orderByDesc('name').offset(2).limit(3).get())
