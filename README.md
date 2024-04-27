@@ -92,7 +92,7 @@ node --run test
 
     console.log(await db.table('users').find(3))
 
-    console.log(await db.table('users').first(3))
+    console.log(await db.table('users').first())
     console.log(await db.table('users').where('id', 2).value('age'))
     console.log(await db.table('users').oldest().get())
     console.log(await db.table('users').latest().get())
