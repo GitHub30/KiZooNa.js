@@ -6,10 +6,6 @@ function json_response($value)
     echo json_encode($value);
 }
 
-// http://localhost:8000/sql-injection.php?dsn=mysql:host=localhost;dbname=mysql&username=root&password=&query=SELECT%20*%20FROM%20user
-// http://localhost:8000/sql-injection.php?dsn=mysql:host=localhost;dbname=mysql&username=root&password=&query=SHOW%20PROCESSLIST
-// http://localhost:8000/sql-injection.php?dsn=mysql:host=localhost;dbname=mysql&username=root&password=&query=SELECT%20*%20FROM%20user%20WHERE%20Host%20=%20?&params=[%22127.0.0.1%22]
-
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
 header('Access-Control-Allow-Headers: *');
