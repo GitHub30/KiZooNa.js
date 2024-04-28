@@ -36,6 +36,38 @@ HTTP MySQL/SQLite Proxy
 </html>
 ```
 
+## SQLite
+
+```html
+<html>
+
+<body>
+  <script src="https://github30.github.io/KiZooNa.js/KiZooNa.js"></script>
+  <script type=module>
+    const db = new DB({
+      url: 'http://localhost/sql-injection.php',
+      dsn: 'sqlite:./foobar.db'
+    })
+    
+    await db.createTable('users', table => {
+      table.increments('id')
+      table.string('name', 255).nullable().default(null)
+      table.integer('age').nullable().default(null)
+      table.timestamp('created_at').useCurrent()
+    })
+    
+    await db.table('users').insert({ name: 'Jake', age: 29 })
+    console.table(await db.table('users').get())
+
+    await db.table('users').where('name', 'Jake').update({ age: 31 })
+
+    await db.table('users').where('name', 'Jake').delete()
+  </script>
+</body>
+
+</html>
+```
+
 # TEST
 
 ```bash
